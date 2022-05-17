@@ -24,13 +24,14 @@ app.get("/api/hello", function (req, res) {
 });
 
 //timestamp routing
-app.get("/api/:time", (req, res) => {
-  const { time } = req.params;
-
-  const msec = time.match(/-/) ? Date.parse(time) : parseInt(time, 10);
-  const timeStamp = { unix: msec, utc: new Date(msec).toUTCString() };
-
-  res.json(timeStamp);
+app.get("/api/:timestamp", (req, res) => {
+  const { timestamp } = req.params;
+  const msec = timestamp.match(/-/) ? Date.parse(timestamp) : +timestamp;
+  const parsedDade = new Date(msec).toUTCString();
+  
+  if(parsedDade === "Invalid Date") return res.json({error: "Invalid Date"});
+  
+  res.json({unix: msec, utc: parsedDade});
 });
 
 // listen for requests :)
