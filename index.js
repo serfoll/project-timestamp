@@ -26,11 +26,15 @@ app.get("/api/hello", function (req, res) {
 //timestamp routing
 app.get("/api/:timestamp", (req, res) => {
   const { timestamp } = req.params;
-  //match 5 number or more or -
-  const msec = timestamp.match(/\d{5,}|-/) ? Date.parse(timestamp) : +timestamp;
+  //match -
+  const msec = timestamp.match(/-/)
+    ? Date.parse(timestamp)
+    : timestamp.match(/\d{5,}/)
+    ? +timestamp
+    : res.json({ error: "Invalid Date" });
   const parsedDade = new Date(msec).toUTCString();
 
-  if (parsedDade === "Invalid Date") return res.json({ error: "Invalid Date" });
+  // if (parsedDade === "Invalid Date") return res.json({ error: "Invalid Date" });
 
   res.json({ unix: msec, utc: parsedDade });
 });
