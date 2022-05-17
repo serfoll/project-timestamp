@@ -28,10 +28,17 @@ app.get("/api/:timestamp", (req, res) => {
   const { timestamp } = req.params;
   const msec = timestamp.match(/-/) ? Date.parse(timestamp) : +timestamp;
   const parsedDade = new Date(msec).toUTCString();
-  
-  if(parsedDade === "Invalid Date") return res.json({error: "Invalid Date"});
-  
-  res.json({unix: msec, utc: parsedDade});
+
+  if (parsedDade === "Invalid Date") return res.json({ error: "Invalid Date" });
+
+  res.json({ unix: msec, utc: parsedDade });
+});
+
+app.get("/api/", (req, res) => {
+  const currDate = new Date().toUTCString();
+  const msec = Date.parse(currDate);
+
+  res.json({ unix: msec, utc: currDate });
 });
 
 // listen for requests :)
